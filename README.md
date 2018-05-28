@@ -1,3 +1,4 @@
+[!images](https://github.com/mayritaspring/Data-Science/blob/master/figures/cover.jpg)
 # Data-Science
 It's all about the skills of data science, containing machine learning, data mining, Python examples and packages.
 
