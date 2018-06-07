@@ -1,3 +1,4 @@
+See reference: https://www.dataiku.com/learn/guide/code/python/advanced-xgboost-tuning.html
 XGBoost has a large number of advanced parameters, which can all affect the quality and speed of your model.
 
 - max_depth : int,
