@@ -58,6 +58,7 @@ import numpy as np
 
 
 #Split to Training and Testing
+from sklearn import cross_validation
 X = credit_data.loc[:, credit_data.columns != 'default payment next month']
 y = credit_data[['default payment next month']]
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
