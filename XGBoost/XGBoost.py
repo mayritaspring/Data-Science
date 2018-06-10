@@ -39,7 +39,7 @@ y = credit_data[['default payment next month']]
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=test_size, random_state=seed)
 
 # XGBoost
-# fit model no training data
+# fit model on training data
 model = XGBClassifier()
 model.fit(X_train, y_train)
 
