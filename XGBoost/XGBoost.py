@@ -1,9 +1,8 @@
 #install package
-from numpy import loadtxt
 from xgboost import XGBClassifier
 import xgboost as xgb
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+import numpy as np
 
 #set path
 import os
@@ -27,7 +26,7 @@ credit_data.index
 credit_data.info()
 credit_data.describe()
 credit_data.dtypes()
-credit_data['LIMIT_BAL'] = credit_data['LIMIT_BAL'].astype('category')
+#credit_data['LIMIT_BAL'] = credit_data['LIMIT_BAL'].astype('category')
 credit_data.groupby(['default payment next month']).count() #check number of y=1 
 
 #Split to Training and Testing
@@ -37,6 +36,10 @@ test_size = 0.3
 X = credit_data.loc[:, credit_data.columns != 'default payment next month']
 y = credit_data[['default payment next month']]
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=test_size, random_state=seed)
+
+
+colnames =  credit_data.columns
+y = np.array(credit_data[colnames[-1]])
 
 # XGBoost
 # fit model on training data
