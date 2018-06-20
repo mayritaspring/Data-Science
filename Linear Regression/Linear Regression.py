@@ -29,6 +29,9 @@ review_data.info()
 review_data.dtypes
 review_data.describe()
 
+##new data
+#review_data = review_data[['Score', 'Member years', 'Helpful votes', 'Nr. reviews']]
+
 ##change data type (categorical var)
 #float64_var = ['Nr. rooms', 'Member years']
 #review_data[float64_var] = review_data[float64_var].astype('float32')
@@ -49,7 +52,7 @@ fields_to_drop = ['User country', 'Period of stay', 'Traveler type','Hotel name'
 review_data = review_data.drop(fields_to_drop, axis = 1 )
 
 #replace missing value with zero
-review_data = review_data.fillna(0)
+review_data = review_data.fillna(review_data.mean())
 
 
 #Split to Training and Testing
@@ -88,17 +91,49 @@ regr.fit(X_train, y_train)
 
 # Make predictions using the testing set
 y_pred = regr.predict(X_test)
-regr_score = regr.score(X_test, y_test, sample_weight=None)
+#regr_score = regr.score(X_test, y_test, sample_weight=None)
 print(regr.score(X_test, y_test, sample_weight=None))
 
 # The coefficients
 print('Coefficients: \n', regr.coef_)
 # The mean squared error
-print("Mean squared error: %.2f"
-      % mean_squared_error(y_test, y_pred))
+print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+regr_mse = mean_squared_error(y_test, y_pred)
+
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % r2_score(y_test, y_pred))
+regr_score = r2_score(y_test, y_pred)
+#-------------------------------------#
+# Ridge regression
+from sklearn.linear_model import Ridge
 
+model = Ridge()
+ridge = GridSearchCV(estimator=model, param_grid = tuned_parameters, cv=n_folds, refit=False)
+ridge.fit(X_train, y_train)
+
+## summarize the results of the grid search
+#print(ridge.best_score_)
+#print(ridge.best_params_['alpha'])
+
+#Final Model
+ridge_final = Ridge(alpha = ridge.best_params_['alpha'])
+ridge_final.fit(X_train, y_train)
+
+# Make predictions using the testing set
+y_pred = ridge_final.predict(X_test)
+#ridge_score = ridge_final.score(X_test, y_test, sample_weight=None)
+print(ridge_final.score(X_test, y_test, sample_weight=None))
+
+# The coefficients
+print('Coefficients: \n', ridge_final.coef_)
+
+# The mean squared error
+print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+ridge_mse = mean_squared_error(y_test, y_pred)
+
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % r2_score(y_test, y_pred))
+ridge_score = r2_score(y_test, y_pred)
 
 #-------------------------------------#
 #LASSO
@@ -126,7 +161,7 @@ clf_final.fit(X_train, y_train)
 
 # Make predictions using the testing set
 y_pred = clf_final.predict(X_test)
-clf_score = clf_final.score(X_test, y_test, sample_weight=None)
+#clf_score = clf_final.score(X_test, y_test, sample_weight=None)
 print(clf_final.score(X_test, y_test, sample_weight=None))
 
 
@@ -135,44 +170,16 @@ print('Coefficients: \n', clf_final.coef_)
 
 # The mean squared error
 print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+clf_mse = mean_squared_error(y_test, y_pred)
 
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % r2_score(y_test, y_pred))
-
-
-
-#-------------------------------------#
-# Ridge regression
-from sklearn.linear_model import Ridge
-
-model = Ridge()
-ridge = GridSearchCV(estimator=model, param_grid = tuned_parameters, cv=n_folds, refit=False)
-ridge.fit(X_train, y_train)
-
-## summarize the results of the grid search
-#print(ridge.best_score_)
-#print(ridge.best_params_['alpha'])
-
-#Final Model
-ridge_final = Ridge(alpha = ridge.best_params_['alpha'])
-ridge_final.fit(X_train, y_train)
-
-# Make predictions using the testing set
-y_pred = ridge_final.predict(X_test)
-ridge_score = ridge_final.score(X_test, y_test, sample_weight=None)
-print(ridge_final.score(X_test, y_test, sample_weight=None))
-
-# The coefficients
-print('Coefficients: \n', ridge_final.coef_)
-
-# The mean squared error
-print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
-
-# Explained variance score: 1 is perfect prediction
-print('Variance score: %.2f' % r2_score(y_test, y_pred))
+clf_score = r2_score(y_test, y_pred)
 
 
 #compare
-print(regr_score, clf_score, ridge_score)
+print('------------------------------------------------')
+print('Compare Score: \n', regr_score, ridge_score, clf_score)
+print('Compare MSE: \n', regr_mse, ridge_mse, clf_mse)
 
 
