@@ -105,8 +105,17 @@ print('Variance score: %.2f' % r2_score(y_test, y_pred))
 regr_score = r2_score(y_test, y_pred)
 #-------------------------------------#
 # Ridge regression
-from sklearn.linear_model import Ridge
 
+#set parameter
+alphas = np.logspace(-4, -0.5, 30)
+tuned_parameters = [{'alpha': alphas}]
+n_folds = 3
+
+#load package
+from sklearn.linear_model import Ridge
+from sklearn.model_selection import GridSearchCV
+
+#model
 model = Ridge()
 ridge = GridSearchCV(estimator=model, param_grid = tuned_parameters, cv=n_folds, refit=False)
 ridge.fit(X_train, y_train)
@@ -139,15 +148,10 @@ ridge_score = r2_score(y_test, y_pred)
 #LASSO
 #load packages
 from sklearn.linear_model import Lasso
-from sklearn.model_selection import GridSearchCV
 
-#set parameter
-lasso = Lasso(random_state=0, normalize = True)
-alphas = np.logspace(-4, -0.5, 30)
-tuned_parameters = [{'alpha': alphas}]
-n_folds = 3
 
 # model
+lasso = Lasso(random_state=0, normalize = True)
 clf = GridSearchCV(lasso,  param_grid= tuned_parameters, cv=n_folds, refit=False)
 clf.fit(X_train, y_train)
 
