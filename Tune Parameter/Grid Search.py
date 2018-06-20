@@ -32,7 +32,6 @@ credit_data.columns
 credit_data.index
 credit_data.info()
 credit_data.describe()
-credit_data.dtypes()
 credit_data['LIMIT_BAL'] = credit_data['LIMIT_BAL'].astype('category')
 credit_data.groupby(['default payment next month']).count() #check number of y=1 
 
