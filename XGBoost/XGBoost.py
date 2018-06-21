@@ -80,7 +80,8 @@ eval_set  = [(X_train,y_train), (X_test,y_test)]
 clf.fit(X_train, y_train, eval_set=eval_set, eval_metric="auc", early_stopping_rounds=30)
 
 #You can get the features importance easily in clf.booster().get_fscore() where clf is your trained classifier.
-features = [ "your list of features ..." ]
+features =  ['User country', 'Period of stay', 'Traveler type','Hotel name','User continent','Review month','Review weekday']
+
 mapFeat = dict(zip(["f"+str(i) for i in range(len(features))],features))
 ts = pd.Series(clf.booster().get_fscore())
 ts.index = ts.reset_index()['index'].map(mapFeat)
