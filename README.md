@@ -14,8 +14,26 @@ It's all about the skills of data science, containing machine learning, data min
 - Popular Machine Learning Algorithm
 1. Logistic Regression
 
-2. SVM, CART, random forest, XGBoost, Neural Networks
+2. Classification And Regression Tree (CART) 
 
-3. LightGBM: https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc
+3. Random Forest
+
+4. Ensemble
+
+5. Gradient Boosting
+> 分成三大形式：
+> a.*Gradient Boosting algorithm* 也稱gradient boosting machine（含learning rate）
+> b.*Stochastic Gradient Boosting* with sub-sampling at the row, column and column per split levels.
+> c.*Regularized Gradient Boosting* 加入L1和L2之regularization term
+
+> a. 該方法可以解決regression和classification的問題
+> b. Boosting是一個ensemble technique，也就是新模型會修正現有模型所產生的error，而模型將會逐步的調整至無法調整．透過gradient descent algorithm以極小化loss已產生新模型．
 
 
+> Implementation
+> a.XGBoost: 與其它gradient boosting的implementation相比快很多. 使用Gradient boosting decision tree algorithm (又稱gradient boosting, multiple additive regression trees, stochastic gradient boosting or gradient boosting machines) 
+> b.LightGBM: https://medium.com/@pushkarmandot/https-medium-com-pushkarmandot-what-is-lightgbm-how-to-implement-it-how-to-fine-tune-the-parameters-60347819b7fc
+
+6. Neural Networks
+
+7. SVM
