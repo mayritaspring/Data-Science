@@ -49,6 +49,7 @@ It's all about the skills of data science, containing machine learning, data min
 
 - Data Preparation 
 1. Cross Validation
+
 	**5-1. 目的** 
 
 	a. Cross Validation的初衷是為了避免依賴某一特定的訓練和驗證資料產生偏差。
