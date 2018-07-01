@@ -13,7 +13,9 @@ import pandas as pd
 import os
 #default_path = "C:/Users/user/Desktop/Github/Data-Science/Data-Science/Example_LasVegasTrip/"
 #default_path = "C:/Users/r05h41009/Documents/May/Data-Science/Example_Bank Data/"
-default_path = "/Users/mayritaspring/Desktop/Github/Data-Science/Linear RegressionDesktop/Github/Data-Science/Data-Science/Example_LasVegasTrip/"
+
+
+default_path = "/Users/mayritaspring/Desktop/Github/Data-Science/Example_LasVegasTrip/"
 
 
 os.chdir(default_path)
@@ -32,12 +34,6 @@ review_data.info()
 review_data.dtypes
 review_data.describe()
 
-##new data
-#review_data = review_data[['Score', 'Helpful votes', 'Nr. reviews']]
-
-##change data type (categorical var)
-#float64_var = ['Nr. rooms', 'Member years']
-#review_data[float64_var] = review_data[float64_var].astype('float32')
 
 #one hot encoding
 category_var = ['User country', 'Period of stay', 'Pool', 'Gym', 'Tennis court','Spa','Casino','Free internet', 'Traveler type','Hotel name','User continent','Review month','Review weekday']
@@ -77,6 +73,7 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 #print("Linear model:", pretty_print_linear(lr.coef_))
 
 #-------------------------------------#
+
 # Linear Regression (OLS)
 # load package
 from sklearn import linear_model
