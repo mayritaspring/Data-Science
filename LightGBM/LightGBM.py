@@ -7,6 +7,7 @@ Created on Sun Jul  1 16:01:40 2018
 """
 
 # coding: utf-8
+import os
 import lightgbm as lgb
 import pandas as pd
 from sklearn.metrics import mean_squared_error
@@ -18,7 +19,6 @@ import matplotlib.pyplot as plt
 print('Load data...')
 
 # set path
-import os
 default_path = "/Users/mayritaspring/Desktop/Github/Data-Science/Example_RecipeRating/"
 os.chdir(default_path)
 
@@ -52,9 +52,9 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-print('Start training...')
 
 # lightgbm
+print('Start training...')
 estimator = lgb.LGBMRegressor()
 
 param_grid = {
@@ -65,9 +65,7 @@ param_grid = {
 }
 
 gbm = GridSearchCV(estimator, param_grid)
-
 gbm.fit(X_train, y_train)
-
 print('Best parameters found by grid search are:', gbm.best_params_)
 
 # Final Model
@@ -95,12 +93,10 @@ print('The rmse of prediction is:', mean_squared_error(y_test, y_pred) ** 0.5)
 # feature importances
 print('Feature importances:', list(gbm_final.feature_importances_))
 
-
 # visualization
 print('Plot feature importances...')
 ax = lgb.plot_importance(gbm_final_fit, max_num_features=10)
 plt.show()
-
 
 
 
