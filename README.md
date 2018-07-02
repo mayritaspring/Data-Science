@@ -16,7 +16,7 @@ It's all about the skills of data science, containing machine learning, data min
 
 2. Classification And Regression Tree (CART) 
 	
-	**2-1. 簡介***
+	**2-1. 簡介**
 	
 	a. [Tutorial](http://www.stats.ox.ac.uk/~flaxman/HT17_lecture13.pdf)
 
