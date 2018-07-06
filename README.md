@@ -49,7 +49,11 @@ It's all about the skills of data science, containing machine learning, data min
 
 6. Neural Networks
 
-7. SVＭ
+7. Fatorization Machine
+
+8. Deep Learning: CNN/RNN(PyTorch)
+
+9. NLP
 
 - Data Preparation 
 1. Cross Validation
