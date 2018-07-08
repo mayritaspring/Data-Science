@@ -36,11 +36,10 @@ It's all about the skills of data science, containing machine learning, data min
 
 	d. 極小化loss function的方式就是針對loss function做微分得到gradient descent，透過將gradient descent取負號會得到下一次的new base-learner，簡言之就是下一次的新模型會修正現有模型所產生的error，最終模型將會逐步的調整至無法調整．
 
-	e. 
 
 	**5-2. 架構**
 	
-	選擇loss function和base-learner．
+	選擇loss function和base-learner是GBM很重要的議題．ｓ
 	
 	a. *Loss Function* 連續型的y和類別型的y會有不同的loss function.
 
@@ -58,7 +57,7 @@ It's all about the skills of data science, containing machine learning, data min
 
 		(4) Other models (Markov Random Fields)
 
-	c. Regularization
+	c. *Regularization*
 
 		(1) Subsampling: 需使用到parameter, bag fraction, 介於0~1. 評估每次迭代會抽樣使用多少data去訓練模型
 
