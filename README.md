@@ -39,6 +39,10 @@ It's all about the skills of data science, containing machine learning, data min
 	e. 
 
 	**5-2. 架構**
+	
+	選擇loss function和base-learner．
+	
+	a. 
  
 	**5-3. 三大Form**
 
