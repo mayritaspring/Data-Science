@@ -11,7 +11,7 @@ It's all about the skills of data science, containing machine learning, data min
 - Machine Learning References
 1. Machine Learning Concept: https://www.csie.ntu.edu.tw/~htlin/mooc/
 
-- Popular Machine Learning Algorithm
+- Popular Topic of Data Science 
 1. Logistic Regression
 
 2. Classification And Regression Tree (CART) 
@@ -42,7 +42,30 @@ It's all about the skills of data science, containing machine learning, data min
 	
 	選擇loss function和base-learner．
 	
-	a. 
+	a. *Loss Function* 連續型的y和類別型的y會有不同的loss function.
+
+		(1) 連續型y: L2 squared loss function, L1 absolute loss function
+
+		(2) 類別型y: Bernoulli loss function, Adaboost loss function(和Adaboost相同的simple exponential loss)
+
+	b. *Base-Learner* 分為以下幾類：
+
+		(1) Linear models (OLS, Ridge regression)
+
+		(2) Smooth models (P-splines, Radial basis functions)
+
+		(3) Decision trees 
+
+		(4) Other models (Markov Random Fields)
+
+	c. Regularization
+
+		(1) Subsampling: 需使用到parameter, bag fraction, 介於0~1. 評估每次迭代會抽樣使用多少data去訓練模型
+
+		(2) Shrinkage: 簡言之就是在線性迴歸當中所使用的正規化方式(EX: LASSO, Ridge Regression)，該方法是為了要降低潛在不穩定的回歸係數影響．調整參數為lambda，介於0~1，當lambda越大，也就代表迭代成本越大
+
+		(3) Early stopping: 最適合的boost次數，lambda和boost次數之間有trade-off關係
+		
  
 	**5-3. 三大Form**
 
