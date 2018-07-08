@@ -20,9 +20,23 @@ It's all about the skills of data science, containing machine learning, data min
 
 4. Ensemble
 
-5. Gradient Boosting
+5. Gradient Boosting Machine (GBM)
 
-	**5-1. 三大Form**
+	**5-1. 核心精神**
+
+	a. 可以解決regression和classification的問題
+	
+	b. Boosting是一個ensemble technique，會透過序列的方式加入新模型到ensemble中
+
+	c. 運用gradient descent algorithm以極小化loss function的方式求解．透過boosting相對應的模型稱為Gradient Boosting Machine (GBM)
+
+	d. 極小化loss function的方式就是針對loss function做微分得到gradient descent，透過將gradient descent取負號會得到下一次的new base-learner，簡言之就是下一次的新模型會修正現有模型所產生的error，最終模型將會逐步的調整至無法調整．
+
+	e. 
+
+	**5-2. 架構**
+ 
+	**5-3. 三大Form**
 
  	a. *Gradient Boosting algorithm* 也稱gradient boosting machine（含learning rate）
  	
@@ -30,14 +44,8 @@ It's all about the skills of data science, containing machine learning, data min
 
 	c. *Regularized Gradient Boosting* 加入L1和L2之regularization term
 	
-	**5-2. 簡介**
-
-	a. 該方法可以解決regression和classification的問題
 	
-	b. Boosting是一個ensemble technique，也就是新模型會修正現有模型所產生的error，而模型將會逐步的調整至無法調整．透過gradient descent algorithm以極小化loss已產生新模型．
-
-
-	**5-3. Implementation**
+	**5-4. Implementation**
 
 	a. XGBoost: 與其它gradient boosting的implementation相比快很多. 且使用Gradient boosting decision tree algorithm (又稱gradient boosting, multiple additive regression trees, stochastic gradient boosting or gradient boosting machines) 
 

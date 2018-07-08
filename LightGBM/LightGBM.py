@@ -10,6 +10,7 @@ Created on Sun Jul  1 16:01:40 2018
 import os
 import lightgbm as lgb
 import pandas as pd
+import numpy as np
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import GridSearchCV
 from sklearn import cross_validation
@@ -103,27 +104,61 @@ plt.show()
 
 
 
-#########Other Code##############
-# train 1
-d_train = lgb.Dataset(X_train, label = y_train)
-params = {}
-params['learning_rate'] = 0.003
-params['boosting_type'] = 'gbdt'
-params['objective'] = 'binary'
-params['metric'] = 'binary_logloss'
-params['sub_feature'] = 0.5
-params['num_leaves'] = 10
-params['min_data'] = 50
-params['max_depth'] = 10
-clf = lgb.train(params, d_train, 100)
+#########Need to debug#####Other Code##############
+ITERATIONS = 10
+from skopt import BayesSearchCV
+from sklearn.model_selection import StratifiedKFold
 
-# train 2
-gbm = lgb.LGBMRegressor(objective='regression',
-                        num_leaves=31,
-                        learning_rate=0.05,
-                        n_estimators=20)
-gbm.fit(X_train, y_train,
-        eval_set=[(X_test, y_test)],
-        eval_metric='l1',
-        early_stopping_rounds=5)
+bayes_cv_tuner = BayesSearchCV(
+    estimator = lgb.LGBMRegressor(
+        objective='regression', #'binary'
+        metric='auc',
+        n_jobs=1,
+        verbose=0
+    ),
+    search_spaces = {
+        'learning_rate': (0.01, 1.0, 'log-uniform'),
+        'num_leaves': (1, 100),      
+        'max_depth': (0, 50),
+        'min_child_samples': (0, 50),
+        'max_bin': (100, 1000),
+        'subsample': (0.01, 1.0, 'uniform'),
+        'subsample_freq': (0, 10),
+        'colsample_bytree': (0.01, 1.0, 'uniform'),
+        'min_child_weight': (0, 10),
+        'subsample_for_bin': (100000, 500000),
+        'reg_lambda': (1e-9, 1000, 'log-uniform'),
+        'reg_alpha': (1e-9, 1.0, 'log-uniform'),
+        'scale_pos_weight': (1e-6, 500, 'log-uniform'),
+        'n_estimators': (50, 100),
+    },    
+    scoring = 'roc_auc',
+    cv = StratifiedKFold(
+        n_splits=3,
+        shuffle=True,
+        random_state=42
+    ),
+    n_jobs = 3,
+    n_iter = ITERATIONS,   
+    verbose = 0,
+    refit = True,
+    random_state = 42
+)
+    
+def status_print(optim_result):
+    """Status callback durring bayesian hyperparameter search"""
+    
+    # Get all the models tested so far in DataFrame format
+    all_models = pd.DataFrame(bayes_cv_tuner.cv_results_)    
+    
+    # Get current parameters and the best parameters    
+    best_params = pd.Series(bayes_cv_tuner.best_params_)
+    print('Model #{}\nBest ROC-AUC: {}\nBest params: {}\n'.format(
+        len(all_models),
+        np.round(bayes_cv_tuner.best_score_, 4),
+        bayes_cv_tuner.best_params_
+    ))    
 
+# Fit the model
+result = bayes_cv_tuner.fit(X_train, y_train, callback=status_print)
+result = bayes_cv_tuner.fit(X_train, y_train)
