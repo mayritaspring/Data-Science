@@ -39,7 +39,7 @@ It's all about the skills of data science, containing machine learning, data min
 
 	**5-2. 架構**
 	
-	選擇loss function和base-learner是GBM很重要的議題．ｓ
+	選擇loss function和base-learner是GBM很重要的議題
 	
 	a. *Loss Function* 連續型的y和類別型的y會有不同的loss function.
 
@@ -92,9 +92,38 @@ It's all about the skills of data science, containing machine learning, data min
 - Data Preparation 
 1. Cross Validation
 
-	**5-1. 目的** 
+	**1-1. 目的** 
 
 	a. Cross Validation的初衷是為了避免依賴某一特定的訓練和驗證資料產生偏差。
 舉例來說，10 fold validation切成十份後，會用其中九份訓練，其中一份驗證，總共會做十次．透過這樣人人都可以輪流當訓練和驗證的過程，將十次error取平均當成E(in)就可以讓error的計算不會偏重在每一次建模的error([reference](https://ithelp.ithome.com.tw/articles/10197461))
 
 	b. 接下來，才會接到機器學習當中，調整不同參數同時也做10 fold validation，以計算E(in)做到不同參數所建立模型之比較，進而選出最好的模型([reference](http://blog.fukuball.com/lin-xuan-tian-jiao-shou-ji-qi-xue-xi-ji-shi-machine-learning-foundations-di-shi-wu-jiang-xue-xi-bi-ji/))
+
+- Feature Engineering
+
+- Feature Selection
+
+- Model Selection
+1. 自動調參算法: 常用的有Grid search（網格搜索）、Random search（隨機搜索）、Bayesian Optimization。
+
+	**1-1. Grid Search**
+
+	Manual grid search works for low-dimensional problems, but does not scale well to higher dimensions.
+
+	**1-2. Bayesian Optimization**
+
+	a. 適用情形
+	
+	Hyperparameter很多或是computationally expensive
+
+	建立probabilistics model以得到performance metric
+
+	algorithm: Update current belief of loss surface of the learner
+	
+	b. Gaussisan Process [Link](https://zhuanlan.zhihu.com/p/27555501)
+
+		b-1. Performance function是由Gaussisan Process來的，是prior
+		
+		b-2. 每一條震盪的線都代表一個樣本，Gaussisan Process
+
+

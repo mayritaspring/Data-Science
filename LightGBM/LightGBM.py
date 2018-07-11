@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Sun Jul  1 16:01:40 2018
@@ -59,7 +58,7 @@ print('Start training...')
 estimator = lgb.LGBMRegressor()
 
 param_grid = {
-    'objective': ['regression'],   
+    'objective': ['regression'],  
     'num_leaves': [12,24,36], 
     'learning_rate': [0.01, 0.05, 0.1, 1],
     'n_estimators': [20, 40]
@@ -105,60 +104,95 @@ plt.show()
 
 
 #########Need to debug#####Other Code##############
-ITERATIONS = 10
-from skopt import BayesSearchCV
-from sklearn.model_selection import StratifiedKFold
+ bayes_cv_tuner = BayesSearchCV(
+ estimator = lgb.LGBMClassifier(
+ boosting='dart',
+ application='multiclass', #application='binary'
+ metric='auc',
+ drop_rate=0.2,
+ n_jobs=1,
+ verbose=0
+ ),
+ search_spaces = {
+ 'learning_rate': (0.01, 0.3, 'log-uniform'),
+ 'num_leaves': (1, 250),      
+ 'max_depth': (0, 7),
+ 'feature_fraction':(0.5,0.7,'uniform'),
+ #         'min_child_samples': (0, 50),
+ 'max_bin': (100, 1000),
+ #         'subsample': (0.01, 1.0, 'uniform'),
+ #         'subsample_freq': (0, 10),
+ #         'colsample_bytree': (0.01, 1.0, 'uniform'),
+ 'min_child_weight': (0, 10),
+ #         'subsample_for_bin': (100000, 500000),
+ 'reg_lambda': (1e-9, 1.0, 'log-uniform'),
+ 'reg_alpha': (1e-9, 1.0, 'log-uniform'),
+ 'scale_pos_weight': (1,12, 'uniform'),
+ },    
+ scoring = 'roc_auc',
+ cv = StratifiedKFold(
+ n_splits=3,
+ shuffle=True,
+ random_state=42
+ ),
+ n_jobs = 1,
+ n_iter = 15,   
+ verbose = 0,
+ refit = True,
+ random_state = 42
+ )
 
-bayes_cv_tuner = BayesSearchCV(
-    estimator = lgb.LGBMRegressor(
-        objective='regression', #'binary'
-        metric='auc',
-        n_jobs=1,
-        verbose=0
-    ),
-    search_spaces = {
-        'learning_rate': (0.01, 1.0, 'log-uniform'),
-        'num_leaves': (1, 100),      
-        'max_depth': (0, 50),
-        'min_child_samples': (0, 50),
-        'max_bin': (100, 1000),
-        'subsample': (0.01, 1.0, 'uniform'),
-        'subsample_freq': (0, 10),
-        'colsample_bytree': (0.01, 1.0, 'uniform'),
-        'min_child_weight': (0, 10),
-        'subsample_for_bin': (100000, 500000),
-        'reg_lambda': (1e-9, 1000, 'log-uniform'),
-        'reg_alpha': (1e-9, 1.0, 'log-uniform'),
-        'scale_pos_weight': (1e-6, 500, 'log-uniform'),
-        'n_estimators': (50, 100),
-    },    
-    scoring = 'roc_auc',
-    cv = StratifiedKFold(
-        n_splits=3,
-        shuffle=True,
-        random_state=42
-    ),
-    n_jobs = 3,
-    n_iter = ITERATIONS,   
-    verbose = 0,
-    refit = True,
-    random_state = 42
-)
-    
-def status_print(optim_result):
-    """Status callback durring bayesian hyperparameter search"""
-    
-    # Get all the models tested so far in DataFrame format
-    all_models = pd.DataFrame(bayes_cv_tuner.cv_results_)    
-    
-    # Get current parameters and the best parameters    
-    best_params = pd.Series(bayes_cv_tuner.best_params_)
-    print('Model #{}\nBest ROC-AUC: {}\nBest params: {}\n'.format(
-        len(all_models),
-        np.round(bayes_cv_tuner.best_score_, 4),
-        bayes_cv_tuner.best_params_
-    ))    
+ # Fit the model
+ result = bayes_cv_tuner.fit(X_train, y_train, callback=status_print)
+ 
+ 
+ # model = lgb.LGBMClassifier(lgbm_params)
+ Best ROC-AUC: 0.7618
+ Best params: {'max_bin': 783, 'max_depth': 7, 'min_child_samples': 37, 'min_child_weight': 7, 'n_estimators': 94, 'num_leaves': 92, 'reg_alpha': 0.6654390259962506, 'reg_lambda': 8.076151891962533e-06, 'scale_pos_weight': 7.642490251593845, 'subsample': 0.25371759984574854, 'subsample_freq': 9}
 
-# Fit the model
-result = bayes_cv_tuner.fit(X_train, y_train, callback=status_print)
-result = bayes_cv_tuner.fit(X_train, y_train)
+ Model #10
+ Best ROC-AUC: 0.7711
+ Best params: {'learning_rate': 0.685534641629431, 'max_bin': 112, 'max_depth': 38, 'min_child_samples': 42, 'min_child_weight': 3, 'n_estimators': 60, 'num_leaves': 25, 'reg_alpha': 1.462442068214992e-06, 'reg_lambda': 3.5571385509488406e-07, 'scale_pos_weight': 0.0052366805641386495, 'subsample': 0.7074795557274224, 'subsample_freq': 10}
+ 
+ lgbm_params = {
+"boosting":"dart",
+"application":"binary",
+"learning_rate": 0.22854155758290642,
+#     "min_data_in_leaf":30,
+'reg_alpha': 0.00013708824735846336,
+'reg_lambda': 1.7069066307349909e-09,
+'min_child_weight': 3,
+'max_bin': 547,
+"num_leaves":80,
+"max_depth":7,
+"feature_fraction":0.6,
+'scale_pos_weight': 5.243025500831312,
+"drop_rate":0.02
+}
+ 
+
+lgbm_train = lgb.Dataset(data = data, label=y)
+gc.collect()
+
+cv_results = lgb.cv(train_set=lgbm_train,
+           params=lgbm_params,
+           nfold=5,
+           num_boost_round=600,
+           early_stopping_rounds=50,
+           verbose_eval=50,
+           metrics=["auc"])
+
+
+optimum_boost_rounds = np.argmax(cv_results['auc-mean'])
+print('Optimum boost rounds = {}'.format(optimum_boost_rounds))
+print('Best CV result = {}'.format(np.max(cv_results['auc-mean'])))
+
+
+y.value_counts()
+
+y_pred = clf.predict(test)
+
+
+out_df = pd.DataFrame({"SK_ID_CURR":test["SK_ID_CURR"], "TARGET":y_pred})
+out_df.to_csv("submissions.csv", index=False)
+ 
