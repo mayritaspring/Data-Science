@@ -112,18 +112,14 @@ It's all about the skills of data science, containing machine learning, data min
 
 	**1-2. Bayesian Optimization**
 
-	a. 適用情形
+	a. 適用情形: Hyperparameter很多或是computationally expensive
 	
-	Hyperparameter很多或是computationally expensive
+	b. Gaussisan Process ([Link](https://zhuanlan.zhihu.com/p/27555501))
 
-	建立probabilistics model以得到performance metric
-
-	algorithm: Update current belief of loss surface of the learner
-	
-	b. Gaussisan Process [Link](https://zhuanlan.zhihu.com/p/27555501)
-
-		b-1. Performance function是由Gaussisan Process來的，是prior
+		b-1. Exploration(會往variance大的地方去找；在資源許可情形下，採用探索式的方式去找解) v.s. Exploitation(會往mean小的地方去找；會往機率較高的地方找解)
 		
-		b-2. 每一條震盪的線都代表一個樣本，Gaussisan Process
+		b-2. covariance function(kernel function:用以描述點與點之間的關係；舉例來說在SVM中會用該函數將低維度映射到高維度空間，以達到線性不可分至線性可分)和mean function會決定某一高斯分布
+
+		b-3. 隨意給定任一超參數(x)，會得loss function(y)，抽一個點會得一條震盪的線 (每一條震盪的線都代表一個樣本，Gaussisan Process)
 
 

@@ -17,6 +17,7 @@ import pandas as pd
 credit_data = pd.read_csv("default of credit card clients.csv",index_col="ID")
 print(credit_data.head())
 
+
 #Split to Training and Testing
 from sklearn import cross_validation
 seed = 7
