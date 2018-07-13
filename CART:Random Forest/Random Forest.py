@@ -7,7 +7,7 @@ Created on Fri Jun  8 14:40:18 2018
 #load data
 #set path
 import os
-default_path = "C:/Users/user/Desktop/Github/Data-Science/Data-Science/Example_Bank Data/"
+default_path = "/Users/mayritaspring/Desktop/Github/Data-Science/Example_Bank Data"
 #default_path = "C:/Users/r05h41009/Documents/May/Data-Science/Example_Bank Data/"
 
 os.chdir(default_path)
@@ -28,40 +28,154 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 
 
 #load packages
-from sklearn.model_selection import cross_val_score
-from sklearn.datasets import make_blobs
+#from sklearn.model_selection import cross_val_score
+#from sklearn.datasets import make_blobs
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
-from numpy import loadtxt
-from sklearn.model_selection import train_test_split
+#from numpy import loadtxt
+#from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import confusion_matrix
+import itertools
+import matplotlib.pyplot as plt
+import numpy as np
+
+# RF
+print('Start training...')
+#clf = DecisionTreeClassifier(max_depth=None, min_samples_split=2,random_state=0)
+#scores = cross_val_score(clf, X_train, y_train)
+#scores.mean()                             
+
+clf = RandomForestClassifier(n_jobs = 4)
+#scores = cross_val_score(clf, X_train, y_train)
+#scores.mean()                             
+
+#clf = ExtraTreesClassifier(n_estimators=10, max_depth=None,min_samples_split=2, random_state=0)
+#scores = cross_val_score(clf, X_train, y_train)
+#scores.mean()
 
 
-clf = DecisionTreeClassifier(max_depth=None, min_samples_split=2,random_state=0)
-scores = cross_val_score(clf, X_train, y_train)
-scores.mean()                             
+param_grid = {
+    #'criterion ': ['gini', 'entropy'],
+    'min_samples_split': [2,50,100], 
+    'random_state': [1, 10, 50, 100], #random seed
+    'n_estimators': [10, 50, 100],
+    'max_features': ['auto', 'log2']
+}
 
-clf = RandomForestClassifier(n_estimators=10, max_depth=None,min_samples_split=2, random_state=0)
-scores = cross_val_score(clf, X_train, y_train)
-scores.mean()                             
+rf = GridSearchCV(clf, param_grid)
+rf.fit(X_train, y_train)
+print('Best parameters found by grid search are:', rf.best_params_)
 
 
-clf = ExtraTreesClassifier(n_estimators=10, max_depth=None,min_samples_split=2, random_state=0)
-scores = cross_val_score(clf, X_train, y_train)
-scores.mean()
+
+
+#---------------------------------------------------------#
+# Final Model
+evals_result = {} 
+print('Start predicting...')
+rf_final = RandomForestClassifier(
+            rf.best_params_['min_samples_split'],
+            rf.best_params_['random_state'],
+            rf.best_params_['n_estimators'],
+            rf.best_params_['max_features'])
+
+rf_final = RandomForestClassifier(max_features = 'auto', min_samples_split = 100, n_estimators =  50, random_state = 1)
+
+rf_final_fit = rf_final.fit(X_train, y_train)
+
+# Make predictions using the testing set
+y_pred = rf_final.predict(X_test)
+
+# confusion matrix
+cnf_matrix = confusion_matrix(y_test, y_pred)
+
+# Plot non-normalized confusion matrix
+# define function
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+  
+
+class_names = ['default payment next month']
+plt.figure()
+plot_confusion_matrix(cnf_matrix, classes=class_names,
+                      title='Confusion matrix, without normalization')
+
+# visualization
+# feature importance
+print('Feature importances:', list(rf_final.feature_importances_))
+
+# variable importance
+importances = rf_final.feature_importances_
+number_to_keep = 20
+std = np.std([tree.feature_importances_ for tree in rf_final.estimators_], axis=0)
+indices = np.argsort(importances)[::-1][:number_to_keep]
+
+# Print the feature ranking
+print("Feature ranking:")
+
+for f in range(len(indices)):
+    print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+
+# Plot the feature importances of the forest
+plt.figure(figsize=(20,10))
+plt.title("Feature importances")
+plt.bar(range(len(indices)), importances[indices], color="b", yerr=std[indices], align="center")
+plt.xticks(range(len(indices)), X_train.columns[indices], rotation=30, size=15)
+plt.xlim([-1, len(indices)])
+plt.show()
+
+
+#-------------------------need to check--------------------------------#
+
 
 # fit model no training data
-model = DecisionTreeClassifier()
-model.fit(X_train, y_train)
+clf.fit(X_train, y_train)
 
 # make predictions for test data
-y_pred = model.predict(X_test)
+y_pred = clf.predict(X_test)
 predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
 accuracy = accuracy_score(y_test, predictions)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
+
+
+
 
 
 #Visualization
@@ -85,10 +199,8 @@ plot_step_coarser = 0.5  # step widths for coarse classifier guesses
 RANDOM_SEED = 13  # fix the seed on each iteration
 
 # Load data
-iris = load_iris()
-
+iris = load_iris()    
 plot_idx = 1
-
 models = [DecisionTreeClassifier(max_depth=None),
           RandomForestClassifier(n_estimators=n_estimators),
           ExtraTreesClassifier(n_estimators=n_estimators),
@@ -183,4 +295,4 @@ for pair in ([0, 1], [0, 2], [2, 3]):
 plt.suptitle("Classifiers on feature subsets of the Iris dataset")
 plt.axis("tight")
 
-plt.show()
+plt.show()  
