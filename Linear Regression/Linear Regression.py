@@ -13,8 +13,6 @@ import pandas as pd
 import os
 #default_path = "C:/Users/user/Desktop/Github/Data-Science/Data-Science/Example_LasVegasTrip/"
 #default_path = "C:/Users/r05h41009/Documents/May/Data-Science/Example_Bank Data/"
-
-
 default_path = "/Users/mayritaspring/Desktop/Github/Data-Science/Example_LasVegasTrip/"
 
 

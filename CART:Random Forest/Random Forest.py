@@ -28,16 +28,11 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 
 
 #load packages
-#from sklearn.model_selection import cross_val_score
-#from sklearn.datasets import make_blobs
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
-#from numpy import loadtxt
-#from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import mean_squared_error
 from sklearn.metrics import confusion_matrix
 import itertools
 import matplotlib.pyplot as plt
@@ -59,7 +54,7 @@ clf = RandomForestClassifier(n_jobs = 4)
 
 
 param_grid = {
-    #'criterion ': ['gini', 'entropy'],
+    'criterion': ['gini', 'entropy'],
     'min_samples_split': [2,50,100], 
     'random_state': [1, 10, 50, 100], #random seed
     'n_estimators': [10, 50, 100],
@@ -92,6 +87,11 @@ y_pred = rf_final.predict(X_test)
 
 # confusion matrix
 cnf_matrix = confusion_matrix(y_test, y_pred)
+
+# accuracy
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy: %.2f%%" % (accuracy * 100.0))
+
 
 # Plot non-normalized confusion matrix
 # define function
@@ -160,24 +160,7 @@ plt.xlim([-1, len(indices)])
 plt.show()
 
 
-#-------------------------need to check--------------------------------#
-
-
-# fit model no training data
-clf.fit(X_train, y_train)
-
-# make predictions for test data
-y_pred = clf.predict(X_test)
-predictions = [round(value) for value in y_pred]
-
-# evaluate predictions
-accuracy = accuracy_score(y_test, predictions)
-print("Accuracy: %.2f%%" % (accuracy * 100.0))
-
-
-
-
-
+#-------------------------use iris data to compare three tree algorithm--------------------------------#
 #Visualization
 #load packages
 import numpy as np
@@ -186,8 +169,7 @@ from matplotlib.colors import ListedColormap
 
 from sklearn import clone
 from sklearn.datasets import load_iris
-from sklearn.ensemble import (RandomForestClassifier, ExtraTreesClassifier,
-                              AdaBoostClassifier)
+from sklearn.ensemble import (RandomForestClassifier, ExtraTreesClassifier, AdaBoostClassifier)
 from sklearn.tree import DecisionTreeClassifier
 
 # Parameters
