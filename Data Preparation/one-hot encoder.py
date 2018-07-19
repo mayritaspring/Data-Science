@@ -16,13 +16,6 @@ os.chdir(default_path)
 data = pd.read_csv('default of credit card clients.csv')
 data.info()
 
-# Split to feature and label 
-from sklearn import cross_validation
-seed = 7
-test_size = 0.3
-X = data.loc[:, data.columns != 'default payment next month']
-y = data[['default payment next month']]
-
 
 # One-hot encoding for categorical columns with get_dummies
 def one_hot_encoder(df, nan_as_category = True):
@@ -32,9 +25,15 @@ def one_hot_encoder(df, nan_as_category = True):
     new_columns = [c for c in df.columns if c not in original_columns]
     return df, new_columns
 
-# save X features after One-hot encoding 
-X = one_hot_encoder(df = X)[0]
+# Split to feature and label 
+def split_train_test(df, label, seed = 7, test_size = 0.3):
+    from sklearn import cross_validation
+    seed = seed
+    test_size = test_size
+    y = df[[label]]
+    X = one_hot_encoder(df = df.loc[:, df.columns != label])[0]
+    X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=test_size, random_state=seed)
+    return X_train, X_test, y_train, y_test
 
-# Split to Training and Testing
-X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=test_size, random_state=seed)
-
+#use function split_train_test can help to 1.set label and dataset 2.One-hot encoding
+output = split_train_test(df = data, label = 'default payment next month')

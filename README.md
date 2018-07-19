@@ -99,6 +99,12 @@ It's all about the skills of data science, containing machine learning, data min
 
 	b. 接下來，才會接到機器學習當中，調整不同參數同時也做10 fold validation，以計算E(in)做到不同參數所建立模型之比較，進而選出最好的模型([reference](http://blog.fukuball.com/lin-xuan-tian-jiao-shou-ji-qi-xue-xi-ji-shi-machine-learning-foundations-di-shi-wu-jiang-xue-xi-bi-ji/))
 
+2. Variance v.s. Bias
+
+	**2-1. 說明**
+	
+	Variance為Out sample error， Bias為In sample error
+
 - Feature Engineering
 
 - Feature Selection
