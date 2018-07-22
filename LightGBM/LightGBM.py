@@ -79,7 +79,7 @@ gbm_final = lgb.LGBMRegressor(objective = gbm.best_params_['objective'],
 gbm_final_fit = gbm_final.fit(X_train, y_train)
 
 # Make predictions using the testing set
-y_pred = gbm_final.predict(X_test, num_iteration=gbm.best_iteration_)
+y_pred = gbm_final.predict(X_test)
 # ridge_score = ridge_final.score(X_test, y_test, sample_weight=None)
 print(gbm_final.score(X_test, y_test, sample_weight=None))
 
@@ -146,15 +146,15 @@ plt.show()
  result = bayes_cv_tuner.fit(X_train, y_train, callback=status_print)
  
  
- # model = lgb.LGBMClassifier(lgbm_params)
- Best ROC-AUC: 0.7618
- Best params: {'max_bin': 783, 'max_depth': 7, 'min_child_samples': 37, 'min_child_weight': 7, 'n_estimators': 94, 'num_leaves': 92, 'reg_alpha': 0.6654390259962506, 'reg_lambda': 8.076151891962533e-06, 'scale_pos_weight': 7.642490251593845, 'subsample': 0.25371759984574854, 'subsample_freq': 9}
-
- Model #10
- Best ROC-AUC: 0.7711
- Best params: {'learning_rate': 0.685534641629431, 'max_bin': 112, 'max_depth': 38, 'min_child_samples': 42, 'min_child_weight': 3, 'n_estimators': 60, 'num_leaves': 25, 'reg_alpha': 1.462442068214992e-06, 'reg_lambda': 3.5571385509488406e-07, 'scale_pos_weight': 0.0052366805641386495, 'subsample': 0.7074795557274224, 'subsample_freq': 10}
+# # model = lgb.LGBMClassifier(lgbm_params)
+# Best ROC-AUC: 0.7618
+# Best params: {'max_bin': 783, 'max_depth': 7, 'min_child_samples': 37, 'min_child_weight': 7, 'n_estimators': 94, 'num_leaves': 92, 'reg_alpha': 0.6654390259962506, 'reg_lambda': 8.076151891962533e-06, 'scale_pos_weight': 7.642490251593845, 'subsample': 0.25371759984574854, 'subsample_freq': 9}
+#
+# Model #10
+# Best ROC-AUC: 0.7711
+# Best params: {'learning_rate': 0.685534641629431, 'max_bin': 112, 'max_depth': 38, 'min_child_samples': 42, 'min_child_weight': 3, 'n_estimators': 60, 'num_leaves': 25, 'reg_alpha': 1.462442068214992e-06, 'reg_lambda': 3.5571385509488406e-07, 'scale_pos_weight': 0.0052366805641386495, 'subsample': 0.7074795557274224, 'subsample_freq': 10}
  
- lgbm_params = {
+lgbm_params = {
 "boosting":"dart",
 "application":"binary",
 "learning_rate": 0.22854155758290642,
