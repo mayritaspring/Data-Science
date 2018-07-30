@@ -15,6 +15,20 @@ os.chdir(default_path)
 # read data
 application_train = pd.read_csv('../Kaggle data/application_train.csv')
 
+# Label encoding (Convert catgorical data to interger catgories)
+from sklearn.preprocessing import LabelEncoder
+def label_encoder(input_df, encoder_dict=None):
+    """ Process a dataframe into a form useable by LightGBM """
+    # Label encode categoricals
+    categorical_feats = input_df.columns[input_df.dtypes == 'object']
+    for feat in categorical_feats:
+        encoder = LabelEncoder()
+        input_df[feat] = encoder.fit_transform(input_df[feat].fillna('NULL'))
+    return input_df, categorical_feats.tolist(), encoder_dict
+application_train, categorical_feats, encoder_dict = label_encoder(application_train)
+X = application_train.drop('TARGET', axis=1)
+y = application_train.TARGET
+
 
 # One-hot encoding for categorical columns with get_dummies
 def one_hot_encoder(df, label, nan_as_category = True):
@@ -47,7 +61,6 @@ def split_train_test(df, label,key = None, seed = 7, test_size = 0.3):
         categorical_columns = one_hot_encoder(df = df.loc[:, df.columns != label], label = label)[2]
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=test_size, random_state=seed)
     return X_train, X_test, y_train, y_test, categorical_columns
-
 
 #use function split_train_test can help to 1.set label and dataset 2.One-hot encoding
 output = split_train_test(df = application_train, label = 'TARGET', key = 'SK_ID_CURR', test_size = 0)
