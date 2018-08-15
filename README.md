@@ -84,6 +84,32 @@ It's all about the skills of data science, containing machine learning, data min
 6. Neural Networks
 
 7. Fatorization Machine
+	**7-1. 核心精神**
+
+		a.
+ 
+	**7-2. 求解方式(SGD)**
+		
+		a. PLA: 選一個點出來，作為錯誤修正的方向．
+
+		b. LR: 每一輪對所有點gradient的貢獻通通算出來．
+
+		c. 以單一輪來看的看，LR 會花較久的時間
+
+		d. SGD: 用隨機挑一個點的方式，取代加總起來取平均，去做偏微分取梯度的動作．即將整體梯度作為這個隨機過程的期望值．簡言之，是用隨機梯度做下降而非真實梯度．原因是當作足夠多次時，真實梯度和隨機梯度會是差不多的．EX:可以用於資料不是一批一批來，而是一筆一筆來的情況，稱online learning
+
+		e. SGD logistic regression 近似於 soft PLA，原因是不像原本PLA只要有錯就更新，而是透過微幅修正的方式進行，錯得多就多更新一點
+
+		f. SGD實務法則: 決定stopping condition，t足夠長．修正幅度設定為0.1為實務常用做法．
+
+
+	**7-3. epoch**
+
+		a. iteration：表示1次迭代（也叫訓練步驟），每次迭代更新1次網絡結構的參數
+
+		b. batch-size：1次迭代所使用的樣本量
+
+		c. epoch：1個epoch表示過了1遍訓練集中的所有樣本。值得注意的是，在深度學習領域中，常用帶mini-batch的隨機梯度下降算法（Stochastic Gradient Descent，SGD）訓練深層結構，它有一個好處就是並不需要遍歷全部的樣本，當數據量非常大時十分有效。此時，可根據實際問題來定義歷元，例如定義10000次迭代為1個時期，若每次迭代的批量大小設為256，那麼1個歷元相當於過了256萬個訓練樣本。
 
 8. Deep Learning: CNN/RNN(PyTorch)
 
@@ -127,5 +153,7 @@ It's all about the skills of data science, containing machine learning, data min
 		b-2. covariance function(kernel function:用以描述點與點之間的關係；舉例來說在SVM中會用該函數將低維度映射到高維度空間，以達到線性不可分至線性可分)和mean function會決定某一高斯分布
 
 		b-3. 隨意給定任一超參數(x)，會得loss function(y)，抽一個點會得一條震盪的線 (每一條震盪的線都代表一個樣本，Gaussisan Process)
+
+
 
 

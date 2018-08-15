@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Jul 31 16:16:59 2018
+
+@author: mayritaspring
+"""
+from googletrans import Translator
+import os
+import pandas as pd
+
+translator = Translator(service_urls=['translate.google.com.tw','translate.google.com'])
+default_path = "/Users/mayritaspring/Desktop/"
+os.chdir(default_path)
+data = pd.read_csv('edm_word_frq.csv',encoding = 'big5')
+
+
+output = []
+for a in range(data.shape[0]):
+        translations = translator.translate(data.loc[a,'word'], dest='en')
+        print(translations.origin, ' -> ', translations.text)
+        output.append(translations.text)
+
+       
+out = pd.DataFrame({"word":data["word"],"frq":data["frq"], "english":output})
+
+out.to_csv("edm_word_frq_new.csv", index=False, encoding = 'big5')
